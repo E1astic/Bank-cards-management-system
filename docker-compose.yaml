@@ -1,0 +1,24 @@
+services:
+  db:
+    image: postgres:17
+    container_name: bank-cards-db
+    environment:
+      POSTGRES_DB: bank-cards
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - cards_data:/var/lib/postgresql/data
+
+volumes:
+  cards_data:
+
+
+
+#Что нужно сделать:
+#  - Настроить сервисы для:
+#      - PostgreSQL (или MySQL) с начальной базой.
+#      - Приложения Spring Boot (если нужно).
+#  - Открыть нужные порты (например, 5432, 8080).
+#  - Настроить volume для хранения данных БД.

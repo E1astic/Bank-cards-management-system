@@ -1,0 +1,26 @@
+server:
+  port: 8075
+
+spring:
+  application:
+    name: bank-cards-management-system
+  datasource:
+    url: jdbc:postgresql://localhost:5433/bank-cards
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  liquibase:
+    change-log: db/changelog/changelog-master.xml
+
+
+
+
+#Что нужно сделать:
+#  - Указать настройки подключения к базе данных.
+#  - Указать порт приложения.
+#  - Настроить параметры безопасности и JWT.
+#  - Включить Swagger UI.
