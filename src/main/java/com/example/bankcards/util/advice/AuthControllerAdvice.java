@@ -1,4 +1,4 @@
-package com.example.bankcards.util;
+package com.example.bankcards.util.advice;
 
 import com.example.bankcards.dto.SimpleResponseBody;
 import com.example.bankcards.exception.ExistingEmailException;

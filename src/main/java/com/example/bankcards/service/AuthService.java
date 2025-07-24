@@ -6,12 +6,11 @@ import com.example.bankcards.dto.UserRegisterRequest;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.exception.ExistingEmailException;
 import com.example.bankcards.security.JwtService;
-import com.example.bankcards.util.UserConverter;
+import com.example.bankcards.converter.UserConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -41,11 +40,10 @@ public class AuthService {
         }
     }
 
-    public UserLoginResponse login(UserLoginRequest userLoginRequest) {
+    public String login(UserLoginRequest userLoginRequest) {
         Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(
                 userLoginRequest.getEmail(), userLoginRequest.getPassword()));
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String token = jwtService.generateToken(userDetails);
-        return new UserLoginResponse(token);
+        return jwtService.generateToken(userDetails);
     }
 }

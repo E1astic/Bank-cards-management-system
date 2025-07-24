@@ -1,4 +1,4 @@
-package com.example.bankcards.util;
+package com.example.bankcards.converter;
 
 import com.example.bankcards.dto.UserRegisterRequest;
 import com.example.bankcards.entity.Role;
