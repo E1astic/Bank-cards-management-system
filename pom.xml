@@ -23,9 +23,11 @@
         <lombok.version>1.18.38</lombok.version>
         <postgresql.version>42.7.5</postgresql.version>
         <liquibase.version>4.33.0</liquibase.version>
+        <modelmapper.version>3.2.3</modelmapper.version>
     </properties>
 
     <dependencies>
+        <!-- Spring Boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -41,7 +43,15 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${spring-boot.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+            <version>${lombok.version}</version>
+        </dependency>
+        <!-- Spring Boot -->
 
+        <!-- JWT -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
@@ -59,7 +69,9 @@
             <version>${jwt.version}</version>
             <scope>runtime</scope>
         </dependency>
+        <!-- JWT -->
 
+        <!-- DB -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -71,14 +83,9 @@
             <artifactId>liquibase-core</artifactId>
             <version>${liquibase.version}</version>
         </dependency>
+        <!-- DB -->
 
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-            <version>${lombok.version}</version>
-        </dependency>
-
+        <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -91,6 +98,15 @@
             <scope>test</scope>
             <version>${spring-security-test.version}</version>
         </dependency>
+        <!-- Test -->
+
+        <!-- Utils -->
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>${modelmapper.version}</version>
+        </dependency>
+        <!-- Utils -->
     </dependencies>
 
     <build>
