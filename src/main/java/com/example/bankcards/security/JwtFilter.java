@@ -50,10 +50,13 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            CustomUserDetails customUserDetails = new CustomUserDetails(username, null,
+                    jwtService.extractUserIdFromToken(token),
+                    List.of(new SimpleGrantedAuthority(jwtService.extractRoleFromToken(token))));
+
             SecurityContextHolder.getContext().setAuthentication(
-                    new UsernamePasswordAuthenticationToken(username, null,
-                            List.of(new SimpleGrantedAuthority(jwtService.extractRoleFromToken(token))))
-            );
+                    new UsernamePasswordAuthenticationToken(customUserDetails, null,
+                            customUserDetails.getAuthorities()));
         }
         filterChain.doFilter(request, response);
     }

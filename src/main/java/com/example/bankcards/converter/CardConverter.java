@@ -34,13 +34,7 @@ public class CardConverter {
     public CardAdminDto mapToCardAdminDto(Card card) {
         CardAdminDto cardAdminDto = modelMapper.map(card, CardAdminDto.class);
         cardAdminDto.setOwnerId(card.getOwner().getId());
-        try {
-            cardAdminDto.setNumber(cryptoUtil.decrypt(card.getNumber()));
-        } catch (Exception e) {
-            System.out.println("Ошибка дешифрования");
-            e.printStackTrace();
-        }
-
+        cardAdminDto.setNumber(cryptoUtil.decrypt(card.getNumber()));
         return cardAdminDto;
     }
 }

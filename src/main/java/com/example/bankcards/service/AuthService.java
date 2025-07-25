@@ -5,6 +5,7 @@ import com.example.bankcards.dto.UserLoginResponse;
 import com.example.bankcards.dto.UserRegisterRequest;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.exception.ExistingEmailException;
+import com.example.bankcards.security.CustomUserDetails;
 import com.example.bankcards.security.JwtService;
 import com.example.bankcards.converter.UserConverter;
 import lombok.RequiredArgsConstructor;
@@ -36,14 +37,14 @@ public class AuthService {
         } catch (UsernameNotFoundException e) {
             User user = userConverter.mapToUser(userRegisterRequest);
             user.setPassword(passwordEncoder.encode(userRegisterRequest.getPassword()));
-            userService.save(user);
+            userService.saveUser(user);
         }
     }
 
     public String login(UserLoginRequest userLoginRequest) {
         Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(
                 userLoginRequest.getEmail(), userLoginRequest.getPassword()));
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return jwtService.generateToken(userDetails);
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        return jwtService.generateToken(customUserDetails);
     }
 }

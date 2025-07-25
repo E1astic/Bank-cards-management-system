@@ -6,6 +6,7 @@ import com.example.bankcards.dto.CardRegisterRequest;
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.exception.CardNotFoundException;
+import com.example.bankcards.exception.EncryptionException;
 import com.example.bankcards.exception.IncorrectCardStatusException;
 import com.example.bankcards.exception.UserNotFoundException;
 import com.example.bankcards.repository.CardRepository;
@@ -36,30 +37,26 @@ public class CardService {
                 .toList();
     }
 
+    public CardAdminDto getCardById(Long id) {
+        Card card = cardRepository.findById(id).orElseThrow(
+                () -> new CardNotFoundException(String.format("Карты с ID = %d не существует", id)));
+        return cardConverter.mapToCardAdminDto(card);
+    }
+
     @Transactional
     public long registerCard(CardRegisterRequest cardRegisterRequest) {
         User owner = userRepository.findById(cardRegisterRequest.getOwnerId())
                 .orElseThrow(() -> new UserNotFoundException(String.format(
-                        "Пользователь с ID = %d не найден", cardRegisterRequest.getOwnerId())));
+                        "Пользователя с ID = %d не существует", cardRegisterRequest.getOwnerId())));
         Card card = cardConverter.mapToCard(cardRegisterRequest, LocalDate.now(), owner);
-        try {
-            card.setNumber(cryptoUtil.encrypt(cardRegisterRequest.getNumber()));
-        } catch(Exception e) {
-            System.out.println("Ошибка шифрования");
-            e.printStackTrace();
-        }
+        card.setNumber(cryptoUtil.encrypt(cardRegisterRequest.getNumber()));
         card = cardRepository.save(card);
         return card.getId();
     }
 
     @Transactional
     public void changeCardStatus(long id, String newStatus) {
-        CardStatus cardStatus;
-        try {
-            cardStatus = CardStatus.valueOf(newStatus.toUpperCase());
-        } catch(IllegalArgumentException e) {
-            throw new IncorrectCardStatusException();
-        }
+        CardStatus cardStatus = CardStatus.valueOf(newStatus.toUpperCase());
         int rowsUpdated = cardRepository.changeCardStatus(id, cardStatus);
         if(rowsUpdated == 0) {
             throw new CardNotFoundException(String.format("Карты с ID = %d не существует", id));

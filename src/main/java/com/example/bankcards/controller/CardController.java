@@ -31,6 +31,12 @@ public class CardController {
         return cardService.getAllCards();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CardAdminDto> getCardById(@PathVariable("id") Long id) {
+        CardAdminDto card = cardService.getCardById(id);
+        return ResponseEntity.ok(card);
+    }
+
     @PostMapping("/register")
     public ResponseEntity<CardRegisterResponse> registerCard(@RequestBody CardRegisterRequest cardRegisterRequest) {
         long cardId = cardService.registerCard(cardRegisterRequest);

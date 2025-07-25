@@ -12,6 +12,7 @@ import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
@@ -27,15 +28,18 @@ public class JwtService {
         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    private Map<String, Object> initClaims(UserDetails userDetails) {
-        return Map.of("role", userDetails.getAuthorities()
-                .stream()
-                .map(GrantedAuthority::getAuthority)
-                .findFirst()
-                .orElse("ROLE_USER"));
+    private Map<String, Object> initClaims(CustomUserDetails userDetails) {
+        return new HashMap<>() {{
+            put("role", userDetails.getAuthorities()
+                    .stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .findFirst()
+                    .orElse("ROLE_USER"));
+            put("userId", userDetails.getUserId());
+        }};
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(CustomUserDetails userDetails) {
         Map<String, Object> claims = initClaims(userDetails);
         Date issuedDate = new Date();
         Date expiredDate = new Date(issuedDate.getTime() + lifetime.toMillis());
@@ -62,5 +66,9 @@ public class JwtService {
 
     public String extractRoleFromToken(String token) {
         return extractClaims(token).get("role", String.class);
+    }
+
+    public Long extractUserIdFromToken(String token) {
+        return extractClaims(token).get("userId", Long.class);
     }
 }
