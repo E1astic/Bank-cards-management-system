@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -91,5 +92,18 @@ public class CardService {
                     "Вам не принадлежит карта с ID = %d", cardId));
         }
         return cardConverter.mapToCardUserDto(card, fullNumber);
+    }
+
+    public BigDecimal getPersonalCardsTotalBalance(Long userId) {
+        return cardRepository.findByOwnerId(userId)
+                .stream()
+                .filter(card -> card.getStatus() == CardStatus.ACTIVE)
+                .map(Card::getBalance)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public BigDecimal getPersonalCardBalance(Long cardId, Long userId) {
+        CardUserDto card = getUserCardById(cardId, userId, null);
+        return card.getBalance();
     }
 }

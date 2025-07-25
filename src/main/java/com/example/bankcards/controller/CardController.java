@@ -1,5 +1,6 @@
 package com.example.bankcards.controller;
 
+import com.example.bankcards.dto.BalanceResponseDto;
 import com.example.bankcards.dto.CardAdminDto;
 import com.example.bankcards.dto.CardRegisterRequest;
 import com.example.bankcards.dto.CardRegisterResponse;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -58,7 +60,7 @@ public class CardController {
     }
 
     @PatchMapping("/expired/today/check")
-    public ResponseEntity<SimpleResponseBody> checkExpiredCard() {
+    public ResponseEntity<SimpleResponseBody> checkTodayExpiredCard() {
         int expiredCards = cardService.updateExpiredCards(LocalDate.now().toString());
         return ResponseEntity.ok(new SimpleResponseBody(String.format(
                 "У %d карт сегодня истекает срок. Их статус был успешно изменен", expiredCards)));
@@ -92,5 +94,19 @@ public class CardController {
             @PathVariable("id") Long id) {
         CardUserDto cardUserDto = cardService.getUserCardById(id, customUserDetails.getUserId(), fullNumber);
         return ResponseEntity.ok(cardUserDto);
+    }
+
+    @GetMapping("/my/balance")
+    public ResponseEntity<BalanceResponseDto> getPersonalCardsTotalBalance(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        BigDecimal totalBalance = cardService.getPersonalCardsTotalBalance(customUserDetails.getUserId());
+        return ResponseEntity.ok(new BalanceResponseDto(totalBalance));
+    }
+
+    @GetMapping("/my/{id}/balance")
+    public ResponseEntity<BalanceResponseDto> getPersonalCardBalance(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails, @PathVariable("id") Long id) {
+        BigDecimal cardBalance = cardService.getPersonalCardBalance(id, customUserDetails.getUserId());
+        return ResponseEntity.ok(new BalanceResponseDto(cardBalance));
     }
 }

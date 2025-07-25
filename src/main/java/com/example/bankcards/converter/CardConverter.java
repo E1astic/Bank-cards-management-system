@@ -28,7 +28,7 @@ public class CardConverter {
                 .expirationDate(activationDate.plusYears(cardRegisterRequest.getExpirationYears()))
                 .status(CardStatus.ACTIVE)
                 .owner(owner)
-                .balance(new BigDecimal(0))
+                .balance(BigDecimal.ZERO)
                 .build();
     }
 
