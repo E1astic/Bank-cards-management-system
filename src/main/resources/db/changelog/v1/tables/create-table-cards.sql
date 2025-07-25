@@ -4,6 +4,6 @@ create table if not exists cards (
     activation_date date not null,
     expiration_date date not null,
     status varchar(50) not null,
-    owner_id bigint references users(id),
+    owner_id bigint references users(id) on delete set null,
     balance decimal(14, 2) not null
 )

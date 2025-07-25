@@ -6,10 +6,8 @@ import com.example.bankcards.security.CustomUserDetails;
 import com.example.bankcards.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -35,5 +33,11 @@ public class UserController {
             @PathVariable Long id, @RequestBody UserDataChangeRequest userDataChangeRequest) {
         userService.updateUser(id, userDataChangeRequest);
         return ResponseEntity.ok(new SimpleResponseBody("Данные пользователя успешно обновлены"));
+    }
+
+    @DeleteMapping("/{id}/del")
+    public ResponseEntity<SimpleResponseBody> deleteUser(@PathVariable("id") Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.ok(new SimpleResponseBody("Пользователь был успешно удален"));
     }
 }

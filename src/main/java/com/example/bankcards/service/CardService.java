@@ -3,11 +3,10 @@ package com.example.bankcards.service;
 import com.example.bankcards.converter.CardConverter;
 import com.example.bankcards.dto.CardAdminDto;
 import com.example.bankcards.dto.CardRegisterRequest;
+import com.example.bankcards.dto.CardUserDto;
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.exception.CardNotFoundException;
-import com.example.bankcards.exception.EncryptionException;
-import com.example.bankcards.exception.IncorrectCardStatusException;
 import com.example.bankcards.exception.UserNotFoundException;
 import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.repository.UserRepository;
@@ -30,17 +29,17 @@ public class CardService {
     private final CardConverter cardConverter;
     private final CryptoUtil cryptoUtil;
 
-    public List<CardAdminDto> getAllCards() {
+    public List<CardAdminDto> getAllCards(Boolean fullNumber) {
         return cardRepository.findAll()
                 .stream()
-                .map(cardConverter::mapToCardAdminDto)
+                .map(card -> cardConverter.mapToCardAdminDto(card, fullNumber))
                 .toList();
     }
 
-    public CardAdminDto getCardById(Long id) {
+    public CardAdminDto getCardById(Long id, Boolean fullNumber) {
         Card card = cardRepository.findById(id).orElseThrow(
                 () -> new CardNotFoundException(String.format("Карты с ID = %d не существует", id)));
-        return cardConverter.mapToCardAdminDto(card);
+        return cardConverter.mapToCardAdminDto(card, fullNumber);
     }
 
     @Transactional
@@ -75,5 +74,22 @@ public class CardService {
                 () -> new CardNotFoundException(String.format("Карты с ID = %d не существует", id)));
         card.getOwner().getCards().remove(card);
         cardRepository.deleteById(id);
+    }
+
+    public List<CardUserDto> getAllUserCards(Long userId, Boolean fullNumber) {
+        return cardRepository.findByOwnerId(userId)
+                .stream()
+                .map(card -> cardConverter.mapToCardUserDto(card, fullNumber))
+                .toList();
+    }
+
+    public CardUserDto getUserCardById(Long cardId, Long userId, Boolean fullNumber) {
+        Card card = cardRepository.findById(cardId).orElseThrow(() -> new CardNotFoundException(
+                String.format("Карты с ID = %d не существует", cardId)));
+        if(card.getOwner() == null || !userId.equals(card.getOwner().getId())) {
+            throw new CardNotFoundException(String.format(
+                    "Вам не принадлежит карта с ID = %d", cardId));
+        }
+        return cardConverter.mapToCardUserDto(card, fullNumber);
     }
 }

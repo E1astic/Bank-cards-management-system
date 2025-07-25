@@ -1,14 +1,18 @@
 package com.example.bankcards.service;
 
 import com.example.bankcards.dto.UserDataChangeRequest;
+import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.exception.ExistingPhoneException;
 import com.example.bankcards.exception.UserNotFoundException;
+import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +21,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CardRepository cardRepository;
 
     @Transactional
     public void updateUser(long id, UserDataChangeRequest userDataChangeRequest) {
@@ -38,5 +43,17 @@ public class UserService {
     @Transactional
     public void saveUser(User user) {
         userRepository.save(user);
+    }
+
+    @Transactional
+    public void deleteUser(Long id) {
+        User user = userRepository.findByIdWithCards(id).orElseThrow(() -> new UserNotFoundException(
+                String.format("Пользователя с ID = %d не существует", id)));
+        List<Long> cardIds = user.getCards()
+                .stream()
+                .map(Card::getId)
+                .toList();
+        cardRepository.clearOwnerByCardIdIn(cardIds);
+        userRepository.deleteByIdNative(id);
     }
 }

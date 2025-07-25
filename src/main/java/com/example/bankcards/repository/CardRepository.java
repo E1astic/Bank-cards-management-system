@@ -9,9 +9,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 public interface CardRepository extends JpaRepository<Card, Long> {
+
+    List<Card> findByOwnerId(Long ownerId);
 
     @Modifying
     @Query("UPDATE Card c SET c.status = :newStatus WHERE c.id = :id")
@@ -20,4 +23,8 @@ public interface CardRepository extends JpaRepository<Card, Long> {
     @Modifying
     @Query("UPDATE Card c SET c.status = 'EXPIRED' WHERE c.expirationDate = :expirationDate")
     int updateExpiredCards(@Param("expirationDate") LocalDate expirationDate);
+
+    @Modifying
+    @Query(value = "UPDATE Cards SET owner_id = NULL WHERE id IN :cardIds", nativeQuery = true)
+    int clearOwnerByCardIdIn(@Param("cardIds") List<Long> cardIds);
 }

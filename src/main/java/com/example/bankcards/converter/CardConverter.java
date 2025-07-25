@@ -2,6 +2,7 @@ package com.example.bankcards.converter;
 
 import com.example.bankcards.dto.CardAdminDto;
 import com.example.bankcards.dto.CardRegisterRequest;
+import com.example.bankcards.dto.CardUserDto;
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.util.CryptoUtil;
@@ -31,10 +32,24 @@ public class CardConverter {
                 .build();
     }
 
-    public CardAdminDto mapToCardAdminDto(Card card) {
+    public CardAdminDto mapToCardAdminDto(Card card, Boolean fullNumber) {
         CardAdminDto cardAdminDto = modelMapper.map(card, CardAdminDto.class);
-        cardAdminDto.setOwnerId(card.getOwner().getId());
-        cardAdminDto.setNumber(cryptoUtil.decrypt(card.getNumber()));
+        cardAdminDto.setOwnerId(card.getOwner() == null ? null : card.getOwner().getId());
+        String cardNumber = cryptoUtil.decrypt(card.getNumber());
+        if(fullNumber == null || !fullNumber) {
+            cardNumber = cryptoUtil.maskCardNumber(cardNumber);
+        }
+        cardAdminDto.setNumber(cardNumber);
         return cardAdminDto;
+    }
+
+    public CardUserDto mapToCardUserDto(Card card, Boolean fullNumber) {
+        CardUserDto cardUserDto = modelMapper.map(card, CardUserDto.class);
+        String cardNumber = cryptoUtil.decrypt(card.getNumber());
+        if(fullNumber == null || !fullNumber) {
+            cardNumber = cryptoUtil.maskCardNumber(cardNumber);
+        }
+        cardUserDto.setNumber(cardNumber);
+        return cardUserDto;
     }
 }
