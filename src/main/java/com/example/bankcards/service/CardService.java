@@ -7,6 +7,7 @@ import com.example.bankcards.dto.CardUserDto;
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.exception.CardNotFoundException;
+import com.example.bankcards.exception.IncorrectCardStatusException;
 import com.example.bankcards.exception.UserNotFoundException;
 import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.repository.UserRepository;
@@ -56,7 +57,12 @@ public class CardService {
 
     @Transactional
     public void changeCardStatus(long id, String newStatus) {
-        CardStatus cardStatus = CardStatus.valueOf(newStatus.toUpperCase());
+        CardStatus cardStatus;
+        try {
+            cardStatus = CardStatus.valueOf(newStatus.toUpperCase());
+        } catch(IllegalArgumentException e) {
+            throw new IncorrectCardStatusException();
+        }
         int rowsUpdated = cardRepository.changeCardStatus(id, cardStatus);
         if(rowsUpdated == 0) {
             throw new CardNotFoundException(String.format("Карты с ID = %d не существует", id));
