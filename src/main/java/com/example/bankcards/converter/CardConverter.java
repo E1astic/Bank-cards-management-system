@@ -21,9 +21,10 @@ public class CardConverter {
     private final ModelMapper modelMapper;
     private final CryptoUtil cryptoUtil;
 
-    public Card mapToCard(CardRegisterRequest cardRegisterRequest, LocalDate activationDate, User owner) {
+    public Card mapToCard(CardRegisterRequest cardRegisterRequest,
+                          String cardNumber, LocalDate activationDate, User owner) {
         return Card.builder()
-                .number(cardRegisterRequest.getNumber())
+                .number(cardNumber)
                 .activationDate(activationDate)
                 .expirationDate(activationDate.plusYears(cardRegisterRequest.getExpirationYears()))
                 .status(CardStatus.ACTIVE)

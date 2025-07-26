@@ -13,6 +13,7 @@ import com.example.bankcards.exception.user.UserNotFoundException;
 import com.example.bankcards.repository.BlockingRequestRepository;
 import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.repository.UserRepository;
+import com.example.bankcards.util.crypto.CardNumberGenerator;
 import com.example.bankcards.util.crypto.CryptoUtil;
 import com.example.bankcards.util.enums.CardStatus;
 import lombok.RequiredArgsConstructor;
@@ -30,9 +31,10 @@ public class CardService {
 
     private final CardRepository cardRepository;
     private final UserRepository userRepository;
+    private final BlockingRequestRepository blockingRequestRepository;
     private final CardConverter cardConverter;
     private final CryptoUtil cryptoUtil;
-    private final BlockingRequestRepository blockingRequestRepository;
+    private final CardNumberGenerator cardNumberGenerator;
 
     public List<CardAdminDto> getAllCards(Boolean fullNumber) {
         return cardRepository.findAll()
@@ -52,8 +54,9 @@ public class CardService {
         User owner = userRepository.findById(cardRegisterRequest.getOwnerId())
                 .orElseThrow(() -> new UserNotFoundException(String.format(
                         "Пользователя с ID = %d не существует", cardRegisterRequest.getOwnerId())));
-        Card card = cardConverter.mapToCard(cardRegisterRequest, LocalDate.now(), owner);
-        card.setNumber(cryptoUtil.encrypt(cardRegisterRequest.getNumber()));
+        String cardNumber = cardNumberGenerator.generateNumber();
+        Card card = cardConverter.mapToCard(cardRegisterRequest, cardNumber, LocalDate.now(), owner);
+        card.setNumber(cryptoUtil.encrypt(cardNumber));
         card = cardRepository.save(card);
         return card.getId();
     }

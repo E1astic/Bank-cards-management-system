@@ -10,11 +10,14 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CardRepository extends JpaRepository<Card, Long> {
 
     List<Card> findByOwnerId(Long ownerId);
+
+    Optional<Card> findByNumber(String number);
 
     @Modifying
     @Query("UPDATE Card c SET c.status = :newStatus WHERE c.id = :id")
