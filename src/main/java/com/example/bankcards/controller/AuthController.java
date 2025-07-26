@@ -1,9 +1,9 @@
 package com.example.bankcards.controller;
 
 import com.example.bankcards.dto.SimpleResponseBody;
-import com.example.bankcards.dto.UserLoginRequest;
-import com.example.bankcards.dto.UserLoginResponse;
-import com.example.bankcards.dto.UserRegisterRequest;
+import com.example.bankcards.dto.user.UserLoginRequest;
+import com.example.bankcards.dto.user.UserLoginResponse;
+import com.example.bankcards.dto.user.UserRegisterRequest;
 import com.example.bankcards.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

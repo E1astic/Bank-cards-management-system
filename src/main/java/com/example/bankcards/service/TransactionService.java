@@ -1,11 +1,11 @@
 package com.example.bankcards.service;
 
-import com.example.bankcards.dto.TransactionDto;
+import com.example.bankcards.dto.card.TransactionDto;
 import com.example.bankcards.entity.Card;
-import com.example.bankcards.exception.BlockedCardException;
-import com.example.bankcards.exception.CardNotFoundException;
-import com.example.bankcards.exception.ExpiredCardException;
-import com.example.bankcards.exception.InsufficientFundsOnCardException;
+import com.example.bankcards.exception.card.BlockedCardException;
+import com.example.bankcards.exception.card.CardNotFoundException;
+import com.example.bankcards.exception.card.ExpiredCardException;
+import com.example.bankcards.exception.card.InsufficientFundsOnCardException;
 import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.util.enums.CardStatus;
 import lombok.RequiredArgsConstructor;

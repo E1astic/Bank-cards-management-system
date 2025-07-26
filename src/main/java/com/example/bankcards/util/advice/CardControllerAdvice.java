@@ -1,12 +1,13 @@
 package com.example.bankcards.util.advice;
 
 import com.example.bankcards.dto.SimpleResponseBody;
-import com.example.bankcards.exception.BlockedCardException;
-import com.example.bankcards.exception.CardNotFoundException;
-import com.example.bankcards.exception.ExpiredCardException;
-import com.example.bankcards.exception.IncorrectCardStatusException;
-import com.example.bankcards.exception.InsufficientFundsOnCardException;
-import com.example.bankcards.exception.UserNotFoundException;
+import com.example.bankcards.exception.card.BlockedCardException;
+import com.example.bankcards.exception.card.CardNotFoundException;
+import com.example.bankcards.exception.card.ExpiredCardException;
+import com.example.bankcards.exception.card.InactiveCardException;
+import com.example.bankcards.exception.card.IncorrectCardStatusException;
+import com.example.bankcards.exception.card.InsufficientFundsOnCardException;
+import com.example.bankcards.exception.user.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -55,5 +56,11 @@ public class CardControllerAdvice {
     public ResponseEntity<SimpleResponseBody> handleException(InsufficientFundsOnCardException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new SimpleResponseBody("На карте недостаточно средств для списания"));
+    }
+
+    @ExceptionHandler(InactiveCardException.class)
+    public ResponseEntity<SimpleResponseBody> handleException(InactiveCardException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new SimpleResponseBody(e.getMessage()));
     }
 }

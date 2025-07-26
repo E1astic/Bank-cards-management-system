@@ -1,8 +1,8 @@
 package com.example.bankcards.util.advice;
 
 import com.example.bankcards.dto.SimpleResponseBody;
-import com.example.bankcards.exception.ExistingPhoneException;
-import com.example.bankcards.exception.UserNotFoundException;
+import com.example.bankcards.exception.user.ExistingPhoneException;
+import com.example.bankcards.exception.user.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

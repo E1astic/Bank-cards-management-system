@@ -1,7 +1,7 @@
 package com.example.bankcards.controller;
 
 import com.example.bankcards.dto.SimpleResponseBody;
-import com.example.bankcards.dto.TransactionDto;
+import com.example.bankcards.dto.card.TransactionDto;
 import com.example.bankcards.security.CustomUserDetails;
 import com.example.bankcards.service.TransactionService;
 import lombok.RequiredArgsConstructor;

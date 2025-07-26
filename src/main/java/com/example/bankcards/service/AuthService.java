@@ -1,10 +1,9 @@
 package com.example.bankcards.service;
 
-import com.example.bankcards.dto.UserLoginRequest;
-import com.example.bankcards.dto.UserLoginResponse;
-import com.example.bankcards.dto.UserRegisterRequest;
+import com.example.bankcards.dto.user.UserLoginRequest;
+import com.example.bankcards.dto.user.UserRegisterRequest;
 import com.example.bankcards.entity.User;
-import com.example.bankcards.exception.ExistingEmailException;
+import com.example.bankcards.exception.user.ExistingEmailException;
 import com.example.bankcards.security.CustomUserDetails;
 import com.example.bankcards.security.JwtService;
 import com.example.bankcards.converter.UserConverter;
@@ -12,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;

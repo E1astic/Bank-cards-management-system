@@ -1,7 +1,7 @@
 package com.example.bankcards.util.advice;
 
 import com.example.bankcards.dto.SimpleResponseBody;
-import com.example.bankcards.exception.ExistingEmailException;
+import com.example.bankcards.exception.user.ExistingEmailException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;

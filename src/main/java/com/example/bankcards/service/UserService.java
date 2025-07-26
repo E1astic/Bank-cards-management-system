@@ -1,10 +1,10 @@
 package com.example.bankcards.service;
 
-import com.example.bankcards.dto.UserDataChangeRequest;
+import com.example.bankcards.dto.user.UserDataChangeRequest;
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.User;
-import com.example.bankcards.exception.ExistingPhoneException;
-import com.example.bankcards.exception.UserNotFoundException;
+import com.example.bankcards.exception.user.ExistingPhoneException;
+import com.example.bankcards.exception.user.UserNotFoundException;
 import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +29,7 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(
                 String.format("Пользователя с ID = %d не существует", id)));
         User userWithPhone = userRepository.findByPhone(userDataChangeRequest.getPhone()).orElse(null);
-        if(userWithPhone != null) {
+        if(userWithPhone != null && !Objects.equals(userWithPhone.getId(), user.getId())) {
             throw new ExistingPhoneException(String.format(
                     "Номер %s уже зарегистрирован", userDataChangeRequest.getPhone()));
         }

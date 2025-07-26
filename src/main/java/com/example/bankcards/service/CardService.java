@@ -1,17 +1,19 @@
 package com.example.bankcards.service;
 
 import com.example.bankcards.converter.CardConverter;
-import com.example.bankcards.dto.CardAdminDto;
-import com.example.bankcards.dto.CardRegisterRequest;
-import com.example.bankcards.dto.CardUserDto;
+import com.example.bankcards.dto.card.CardAdminDto;
+import com.example.bankcards.dto.card.CardRegisterRequest;
+import com.example.bankcards.dto.card.CardUserDto;
 import com.example.bankcards.entity.Card;
+import com.example.bankcards.entity.CardBlockingRequest;
 import com.example.bankcards.entity.User;
-import com.example.bankcards.exception.CardNotFoundException;
-import com.example.bankcards.exception.IncorrectCardStatusException;
-import com.example.bankcards.exception.UserNotFoundException;
+import com.example.bankcards.exception.card.CardNotFoundException;
+import com.example.bankcards.exception.card.IncorrectCardStatusException;
+import com.example.bankcards.exception.user.UserNotFoundException;
+import com.example.bankcards.repository.BlockingRequestRepository;
 import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.repository.UserRepository;
-import com.example.bankcards.util.CryptoUtil;
+import com.example.bankcards.util.crypto.CryptoUtil;
 import com.example.bankcards.util.enums.CardStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,7 @@ public class CardService {
     private final UserRepository userRepository;
     private final CardConverter cardConverter;
     private final CryptoUtil cryptoUtil;
+    private final BlockingRequestRepository blockingRequestRepository;
 
     public List<CardAdminDto> getAllCards(Boolean fullNumber) {
         return cardRepository.findAll()
@@ -67,6 +70,11 @@ public class CardService {
         if(rowsUpdated == 0) {
             throw new CardNotFoundException(String.format("Карты с ID = %d не существует", id));
         }
+        List<Long> blockingRequestsIds = blockingRequestRepository.findByCardId(id)
+                .stream()
+                .map(CardBlockingRequest::getId)
+                .toList();
+        blockingRequestRepository.setCompletedStatusByRequestIds(blockingRequestsIds);
     }
 
     @Transactional
@@ -80,7 +88,8 @@ public class CardService {
         Card card = cardRepository.findById(id).orElseThrow(
                 () -> new CardNotFoundException(String.format("Карты с ID = %d не существует", id)));
         card.getOwner().getCards().remove(card);
-        cardRepository.deleteById(id);
+        blockingRequestRepository.clearCardsByCardId(id);
+        cardRepository.deleteByIdNative(id);
     }
 
     public List<CardUserDto> getAllUserCards(Long userId, Boolean fullNumber) {

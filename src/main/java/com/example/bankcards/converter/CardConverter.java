@@ -1,11 +1,11 @@
 package com.example.bankcards.converter;
 
-import com.example.bankcards.dto.CardAdminDto;
-import com.example.bankcards.dto.CardRegisterRequest;
-import com.example.bankcards.dto.CardUserDto;
+import com.example.bankcards.dto.card.CardAdminDto;
+import com.example.bankcards.dto.card.CardRegisterRequest;
+import com.example.bankcards.dto.card.CardUserDto;
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.User;
-import com.example.bankcards.util.CryptoUtil;
+import com.example.bankcards.util.crypto.CryptoUtil;
 import com.example.bankcards.util.enums.CardStatus;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
