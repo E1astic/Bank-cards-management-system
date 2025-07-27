@@ -17,9 +17,11 @@ import com.example.bankcards.util.crypto.CardNumberGenerator;
 import com.example.bankcards.util.crypto.CryptoUtil;
 import com.example.bankcards.util.enums.CardStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.print.Pageable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -36,8 +38,9 @@ public class CardService {
     private final CryptoUtil cryptoUtil;
     private final CardNumberGenerator cardNumberGenerator;
 
-    public List<CardAdminDto> getAllCards(Boolean fullNumber) {
-        return cardRepository.findAll()
+    public List<CardAdminDto> getAllCards(Boolean fullNumber, Integer size, Integer page) {
+        PageRequest pageRequest = validateAndGetPageRequest(page, size);
+        return cardRepository.findAll(pageRequest)
                 .stream()
                 .map(card -> cardConverter.mapToCardAdminDto(card, fullNumber))
                 .toList();
@@ -81,9 +84,9 @@ public class CardService {
     }
 
     @Transactional
-    public int updateExpiredCards(String expirationDate) {
-        LocalDate date = LocalDate.parse(expirationDate);
-        return cardRepository.updateExpiredCards(date);
+    public int updateExpiredCards(LocalDate expirationDate) {
+        //LocalDate date = LocalDate.parse(expirationDate);
+        return cardRepository.updateExpiredCards(expirationDate);
     }
 
     @Transactional
@@ -95,8 +98,9 @@ public class CardService {
         cardRepository.deleteByIdNative(id);
     }
 
-    public List<CardUserDto> getAllUserCards(Long userId, Boolean fullNumber) {
-        return cardRepository.findByOwnerId(userId)
+    public List<CardUserDto> getAllUserCards(Long userId, Boolean fullNumber, Integer size, Integer page) {
+        PageRequest pageRequest = validateAndGetPageRequest(page, size);
+        return cardRepository.findByOwnerId(userId, pageRequest)
                 .stream()
                 .map(card -> cardConverter.mapToCardUserDto(card, fullNumber))
                 .toList();
@@ -123,5 +127,11 @@ public class CardService {
     public BigDecimal getPersonalCardBalance(Long cardId, Long userId) {
         CardUserDto card = getUserCardById(cardId, userId, null);
         return card.getBalance();
+    }
+
+    private PageRequest validateAndGetPageRequest(int page, int size) {
+        size = (size <= 0) ? 1 : size;
+        page = (page < 0) ? 0 : page;
+        return PageRequest.of(page, size);
     }
 }

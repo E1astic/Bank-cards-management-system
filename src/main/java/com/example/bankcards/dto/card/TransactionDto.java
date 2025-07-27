@@ -1,5 +1,9 @@
 package com.example.bankcards.dto.card;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -7,9 +11,16 @@ import java.math.BigDecimal;
 @Data
 public class TransactionDto {
 
+    @NotNull(message = "ID карты отправителя обязательно")
+    @Positive(message = "ID карты отправителя должно быть положительным")
     private Long senderCardId;
 
+    @NotNull(message = "ID карты получателя обязательно")
+    @Positive(message = "ID карты получателя должно быть положительным")
     private Long receivedCardId;
 
+    @NotNull(message = "Сумма перевода обязательна")
+    @Min(value = 1, message = "Сумма перевода не может быть меньше 1")
+    @Max(value = 500000, message = "Сумма перевода не может быть больше 500 000")
     private BigDecimal amount;
 }

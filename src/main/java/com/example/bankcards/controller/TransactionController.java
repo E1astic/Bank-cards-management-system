@@ -4,6 +4,7 @@ import com.example.bankcards.dto.SimpleResponseBody;
 import com.example.bankcards.dto.card.TransactionDto;
 import com.example.bankcards.security.CustomUserDetails;
 import com.example.bankcards.service.TransactionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,7 +23,7 @@ public class TransactionController {
     @PostMapping("/create")
     public ResponseEntity<SimpleResponseBody> createTransaction(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
-            @RequestBody TransactionDto transactionDto) {
+            @Valid @RequestBody TransactionDto transactionDto) {
         transactionService.doTransfer(transactionDto, customUserDetails.getUserId());
         return ResponseEntity.ok(new SimpleResponseBody("Перевод выполнен успешно"));
     }
