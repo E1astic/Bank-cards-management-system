@@ -1,5 +1,6 @@
 package com.example.bankcards.util.crypto;
 
+import com.example.bankcards.exception.card.IncorrectCardNumberException;
 import com.example.bankcards.exception.crypto.DecryptionException;
 import com.example.bankcards.exception.crypto.EncryptionException;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +16,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 @Component
-public class CryptoUtil {
+public class CardNumberCryptoUtil {
 
     private final String ALGORITHM = "AES";
     private final String TRANSFORMATION = "AES";
@@ -50,11 +51,13 @@ public class CryptoUtil {
     }
 
     public String maskCardNumber(String cardNumber) {
-        if (cardNumber == null || cardNumber.length() < 4) {
-            return cardNumber;
+        final int digitsNumber = 16;
+        final int spacesNumber = 3;
+        final int numberLength = digitsNumber + spacesNumber;
+        if (cardNumber == null || cardNumber.length() != numberLength) {
+            throw new IncorrectCardNumberException();
         }
-        int length = cardNumber.length();
-        String lastFour = cardNumber.substring(length - 4);
+        String lastFour = cardNumber.substring(numberLength - 4);
         return "**** **** **** " + lastFour;
     }
 }

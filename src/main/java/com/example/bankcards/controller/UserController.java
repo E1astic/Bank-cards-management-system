@@ -26,7 +26,7 @@ public class UserController {
 
     @PutMapping("/{id}/update")
     public ResponseEntity<SimpleResponseBody> updateUserInfo(
-            @Positive(message = "ID пользователя должно быть положительным") @PathVariable Long id,
+            @Positive(message = "ID пользователя должен быть положительным") @PathVariable Long id,
             @Valid @RequestBody UserDataChangeRequest userDataChangeRequest) {
         userService.updateUser(id, userDataChangeRequest);
         return ResponseEntity.ok(new SimpleResponseBody("Данные пользователя успешно обновлены"));
@@ -34,7 +34,7 @@ public class UserController {
 
     @DeleteMapping("/{id}/del")
     public ResponseEntity<SimpleResponseBody> deleteUser(
-            @Positive(message = "ID пользователя должно быть положительным") @PathVariable("id") Long id) {
+            @Positive(message = "ID пользователя должнен быть положительным") @PathVariable("id") Long id) {
         userService.deleteUser(id);
         return ResponseEntity.ok(new SimpleResponseBody("Пользователь был успешно удален"));
     }

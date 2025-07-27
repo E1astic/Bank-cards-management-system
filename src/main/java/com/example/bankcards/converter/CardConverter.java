@@ -5,7 +5,7 @@ import com.example.bankcards.dto.card.CardRegisterRequest;
 import com.example.bankcards.dto.card.CardUserDto;
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.User;
-import com.example.bankcards.util.crypto.CryptoUtil;
+import com.example.bankcards.util.crypto.CardNumberCryptoUtil;
 import com.example.bankcards.util.enums.CardStatus;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -19,7 +19,7 @@ import java.time.LocalDate;
 public class CardConverter {
 
     private final ModelMapper modelMapper;
-    private final CryptoUtil cryptoUtil;
+    private final CardNumberCryptoUtil cryptoUtil;
 
     public Card mapToCard(CardRegisterRequest cardRegisterRequest,
                           String cardNumber, LocalDate activationDate, User owner) {
@@ -37,7 +37,7 @@ public class CardConverter {
         CardAdminDto cardAdminDto = modelMapper.map(card, CardAdminDto.class);
         cardAdminDto.setOwnerId(card.getOwner() == null ? null : card.getOwner().getId());
         String cardNumber = cryptoUtil.decrypt(card.getNumber());
-        if(fullNumber == null || !fullNumber) {
+        if (fullNumber == null || !fullNumber) {
             cardNumber = cryptoUtil.maskCardNumber(cardNumber);
         }
         cardAdminDto.setNumber(cardNumber);
@@ -47,7 +47,7 @@ public class CardConverter {
     public CardUserDto mapToCardUserDto(Card card, Boolean fullNumber) {
         CardUserDto cardUserDto = modelMapper.map(card, CardUserDto.class);
         String cardNumber = cryptoUtil.decrypt(card.getNumber());
-        if(fullNumber == null || !fullNumber) {
+        if (fullNumber == null || !fullNumber) {
             cardNumber = cryptoUtil.maskCardNumber(cardNumber);
         }
         cardUserDto.setNumber(cardNumber);

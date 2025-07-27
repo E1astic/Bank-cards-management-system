@@ -14,14 +14,13 @@ import com.example.bankcards.repository.BlockingRequestRepository;
 import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.repository.UserRepository;
 import com.example.bankcards.util.crypto.CardNumberGenerator;
-import com.example.bankcards.util.crypto.CryptoUtil;
+import com.example.bankcards.util.crypto.CardNumberCryptoUtil;
 import com.example.bankcards.util.enums.CardStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Pageable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -35,7 +34,7 @@ public class CardService {
     private final UserRepository userRepository;
     private final BlockingRequestRepository blockingRequestRepository;
     private final CardConverter cardConverter;
-    private final CryptoUtil cryptoUtil;
+    private final CardNumberCryptoUtil cryptoUtil;
     private final CardNumberGenerator cardNumberGenerator;
 
     public List<CardAdminDto> getAllCards(Boolean fullNumber, Integer size, Integer page) {
@@ -85,7 +84,6 @@ public class CardService {
 
     @Transactional
     public int updateExpiredCards(LocalDate expirationDate) {
-        //LocalDate date = LocalDate.parse(expirationDate);
         return cardRepository.updateExpiredCards(expirationDate);
     }
 

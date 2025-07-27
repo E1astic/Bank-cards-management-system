@@ -11,12 +11,12 @@ import java.math.BigDecimal;
 @Data
 public class TransactionDto {
 
-    @NotNull(message = "ID карты отправителя обязательно")
-    @Positive(message = "ID карты отправителя должно быть положительным")
+    @NotNull(message = "ID карты отправителя обязателен")
+    @Positive(message = "ID карты отправителя должен быть положительным")
     private Long senderCardId;
 
-    @NotNull(message = "ID карты получателя обязательно")
-    @Positive(message = "ID карты получателя должно быть положительным")
+    @NotNull(message = "ID карты получателя обязателен")
+    @Positive(message = "ID карты получателя должен быть положительным")
     private Long receivedCardId;
 
     @NotNull(message = "Сумма перевода обязательна")

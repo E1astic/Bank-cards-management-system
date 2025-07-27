@@ -49,7 +49,7 @@ public class CardController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CardAdminDto> getCardById(
-            @Positive(message = "ID карты должно быть положительным") @PathVariable("id") Long id,
+            @Positive(message = "ID карты должен быть положительным") @PathVariable("id") Long id,
             @RequestParam(value = "fullNumber", required = false) Boolean fullNumber) {
         CardAdminDto card = cardService.getCardById(id, fullNumber);
         return ResponseEntity.ok(card);
@@ -64,17 +64,17 @@ public class CardController {
 
     @PatchMapping("{id}/status/{status}")
     public ResponseEntity<SimpleResponseBody> updateCardStatus(
-            @Positive(message = "ID карты должно быть положительным") @PathVariable("id") Long id,
+            @Positive(message = "ID карты должен быть положительным") @PathVariable("id") Long id,
             @PathVariable("status") String status) {
         cardService.changeCardStatus(id, status);
-        return ResponseEntity.ok(new SimpleResponseBody("Статус карты был успешно изменен"));
+        return ResponseEntity.ok(new SimpleResponseBody("Статус карты был успешен изменен"));
     }
 
     @PatchMapping("/expired/today/check")
     public ResponseEntity<SimpleResponseBody> checkTodayExpiredCard() {
         int expiredCards = cardService.updateExpiredCards(LocalDate.now());
         return ResponseEntity.ok(new SimpleResponseBody(String.format(
-                "У %d карт сегодня истекает срок. Их статус был успешно изменен", expiredCards)));
+                "У %d карт сегодня истекает срок. Их статус был успешен изменен", expiredCards)));
     }
 
     @PatchMapping("/expired/{expirationDate}/check")
@@ -83,12 +83,12 @@ public class CardController {
             @PathVariable("expirationDate") LocalDate expirationDate) {
         int expiredCards = cardService.updateExpiredCards(expirationDate);
         return ResponseEntity.ok(new SimpleResponseBody(String.format(
-                "У %d карт %s истекает срок. Их статус был успешно изменен", expiredCards, expirationDate)));
+                "У %d карт %s истекает срок. Их статус был успешен изменен", expiredCards, expirationDate)));
     }
 
     @DeleteMapping("/{id}/del")
     public ResponseEntity<SimpleResponseBody> deleteCardById(
-            @Positive(message = "ID карты должно быть положительным") @PathVariable long id) {
+            @Positive(message = "ID карты должен быть положительным") @PathVariable long id) {
         cardService.deleteCardById(id);
         return ResponseEntity.ok(new SimpleResponseBody("Карта была успешно удалена"));
     }

@@ -46,7 +46,7 @@ public class PersonalCardController {
     public ResponseEntity<CardUserDto> getPersonalCardById(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestParam(value = "fullNumber", required = false) Boolean fullNumber,
-            @Positive(message = "ID карты должно быть положительным") @PathVariable("id") Long id) {
+            @Positive(message = "ID карты должен быть положительным") @PathVariable("id") Long id) {
         CardUserDto cardUserDto = cardService.getUserCardById(id, customUserDetails.getUserId(), fullNumber);
         return ResponseEntity.ok(cardUserDto);
     }
@@ -61,7 +61,7 @@ public class PersonalCardController {
     @GetMapping("/{id}/balance")
     public ResponseEntity<BalanceResponseDto> getPersonalCardBalance(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
-            @Positive(message = "ID карты должно быть положительным") @PathVariable("id") Long id) {
+            @Positive(message = "ID карты должен быть положительным") @PathVariable("id") Long id) {
         BigDecimal cardBalance = cardService.getPersonalCardBalance(id, customUserDetails.getUserId());
         return ResponseEntity.ok(new BalanceResponseDto(cardBalance));
     }
@@ -69,7 +69,7 @@ public class PersonalCardController {
     @PostMapping("/{id}/block")
     public ResponseEntity<SimpleResponseBody> createCardBlockingRequest(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
-            @Positive(message = "ID карты должно быть положительным") @PathVariable("id") Long id) {
+            @Positive(message = "ID карты должен быть положительным") @PathVariable("id") Long id) {
         blockingRequestService.createRequest(customUserDetails.getUserId(), id);
         return ResponseEntity.ok(new SimpleResponseBody("Завка на блокировку карты успешно отправлена"));
     }

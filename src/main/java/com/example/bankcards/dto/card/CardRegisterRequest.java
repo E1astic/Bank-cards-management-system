@@ -15,6 +15,6 @@ public class CardRegisterRequest {
     private Integer expirationYears;
 
     @NotNull(message = "Владелец карты обязателен")
-    @Positive(message = "ID владельца карты должно быть положительным")
+    @Positive(message = "ID владельца карты должен быть положительным")
     private Long ownerId;
 }

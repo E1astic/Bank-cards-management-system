@@ -11,7 +11,7 @@ import java.security.SecureRandom;
 @RequiredArgsConstructor
 public class CardNumberGenerator {
 
-    private final CryptoUtil cryptoUtil;
+    private final CardNumberCryptoUtil cryptoUtil;
     private final CardRepository cardRepository;
 
     public String generateNumber() {
@@ -38,7 +38,6 @@ public class CardNumberGenerator {
                 cardNumber.setLength(0);
             }
         }
-
         return cardNumber.toString();
     }
 

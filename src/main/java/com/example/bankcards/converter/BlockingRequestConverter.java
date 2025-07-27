@@ -21,7 +21,7 @@ public class BlockingRequestConverter {
 
     public CardBlockingResponseDto mapToCardBlockingResponseDto(CardBlockingRequest cardBlockingRequest) {
         return CardBlockingResponseDto.builder()
-                .cardId(cardBlockingRequest.getCard() == null ? null :cardBlockingRequest.getCard().getId())
+                .cardId(cardBlockingRequest.getCard() == null ? null : cardBlockingRequest.getCard().getId())
                 .status(cardBlockingRequest.getStatus())
                 .timestamp(cardBlockingRequest.getTimestamp())
                 .build();
