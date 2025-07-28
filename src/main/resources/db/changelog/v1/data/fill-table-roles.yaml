@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: fill-table-roles
+      author: Roman Filimonov
+      changes:
+        - sqlFile:
+            path: fill-table-roles.sql
+            relativeToChangelogFile: true
+      rollback:
+        - sqlFile:
+            path: rollback/truncate-table-roles.sql
+            relativeToChangelogFile: true

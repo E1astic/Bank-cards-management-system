@@ -16,7 +16,7 @@ spring:
       ddl-auto: none
     show-sql: true
   liquibase:
-    change-log: db/changelog/changelog-master.xml
+    change-log: db/changelog/changelog-master.yaml
 
 springdoc:
   api-docs:

@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: fill-table-users
+      author: Roman Filimonov
+      changes:
+        - sqlFile:
+            path: fill-table-users.sql
+            relativeToChangelogFile: true
+      rollback:
+        - sqlFile:
+            path: rollback/truncate-table-users.sql
+            relativeToChangelogFile: true

@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - include:
+      file: tables/create-table-roles.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: tables/create-table-users.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: tables/create-table-cards.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: tables/create-table-blocking_requests.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: data/fill-table-roles.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: data/fill-table-users.yaml
+      relativeToChangelogFile: true

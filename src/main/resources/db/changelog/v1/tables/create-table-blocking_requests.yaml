@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-blocking_requests
+      author: Roman Filimonov
+      changes:
+        - sqlFile:
+            path: create-table-blocking_requests.sql
+            relativeToChangelogFile: true
+      rollback:
+        - sqlFile:
+            path: rollback/drop-table-blocking_requests.sql
+            relativeToChangelogFile: true

@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-users
+      author: Roman Filimonov
+      changes:
+        - sqlFile:
+            path: create-table-users.sql
+            relativeToChangelogFile: true
+      rollback:
+        - sqlFile:
+            path: rollback/drop-table-users.sql
+            relativeToChangelogFile: true
