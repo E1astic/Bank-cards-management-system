@@ -1,4 +1,4 @@
-package com.example.bankcards.util.validator;
+package com.example.bankcards.util.handler;
 
 import com.example.bankcards.dto.SimpleResponseBody;
 import com.example.bankcards.exception.card.BlockedCardException;

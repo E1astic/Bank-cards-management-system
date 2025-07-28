@@ -18,14 +18,17 @@ spring:
   liquibase:
     change-log: db/changelog/changelog-master.xml
 
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+
 jwt:
   secret: c1107dMqjNQ0qcB0MA2qXerxoPfSaRaBwn5awSXdiIXD51kvOQVdxB1UO6if2SWGm9e4bubObaChqqr91Bw9XMsKKnFDkKZoWTqplTK1GuzwMGK8TZdeLw9kxUFuYs6ObqbhtrmLTo2CgrJkuSUPFhlMWqtfvmrrHLTCgIcoQEUM8395c6DS1xKIsFNYWiLzsmcYIt7abPupnMVjah6Mc6aXt1mtw64wp3JZpciRmEyD9ZvJcdrcUYBrEV1vRbPn
   lifetime: 10m
-encrypt-key: f6ec470625b29760bcc63855ae953876
+crypto:
+  encrypt-key: f6ec470625b29760bcc63855ae953876
+  algorithm: AES
 
 
-#Что нужно сделать:
-#  - Указать настройки подключения к базе данных.
-#  - Указать порт приложения.
-#  - Настроить параметры безопасности и JWT.
-#  - Включить Swagger UI.

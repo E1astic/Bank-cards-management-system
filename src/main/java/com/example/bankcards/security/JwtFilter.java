@@ -28,6 +28,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private String token;
     private String username;
+    private String role;
+    private long userId;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -38,6 +40,8 @@ public class JwtFilter extends OncePerRequestFilter {
             token = authHeader.substring(7);
             try {
                 username = jwtService.extractUsernameFromToken(token);
+                userId = jwtService.extractUserIdFromToken(token);
+                role = jwtService.extractRoleFromToken(token);
             } catch (SignatureException e) {
                 handleException(response, "Некорректный JWT");
                 return;
@@ -51,8 +55,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             CustomUserDetails customUserDetails = new CustomUserDetails(username, null,
-                    jwtService.extractUserIdFromToken(token),
-                    List.of(new SimpleGrantedAuthority(jwtService.extractRoleFromToken(token))));
+                    userId, List.of(new SimpleGrantedAuthority(role)));
 
             SecurityContextHolder.getContext().setAuthentication(
                     new UsernamePasswordAuthenticationToken(customUserDetails, null,

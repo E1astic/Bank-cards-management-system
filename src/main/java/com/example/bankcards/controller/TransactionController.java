@@ -4,6 +4,8 @@ import com.example.bankcards.dto.SimpleResponseBody;
 import com.example.bankcards.dto.card.TransactionDto;
 import com.example.bankcards.security.CustomUserDetails;
 import com.example.bankcards.service.TransactionService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/transaction")
 @RequiredArgsConstructor
+@Tag(name = "TransactionController", description = "Контроллер для совершения денежных переводов между картами")
 public class TransactionController {
 
     private final TransactionService transactionService;
 
     @PostMapping("/create")
+    @Operation(summary = "Совершение денежного перевода на указанную сумму между своими двумя картами")
     public ResponseEntity<SimpleResponseBody> createTransaction(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @Valid @RequestBody TransactionDto transactionDto) {

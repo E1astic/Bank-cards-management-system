@@ -3,6 +3,8 @@ package com.example.bankcards.controller;
 import com.example.bankcards.dto.SimpleResponseBody;
 import com.example.bankcards.dto.user.UserDataChangeRequest;
 import com.example.bankcards.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 @Validated
+@Tag(name = "UserController", description = "Контроллер для управления пользователями администратором")
 public class UserController {
 
     private final UserService userService;
 
     @PutMapping("/{id}/update")
+    @Operation(summary = "Обновление данных пользователя")
     public ResponseEntity<SimpleResponseBody> updateUserInfo(
             @Positive(message = "ID пользователя должен быть положительным") @PathVariable Long id,
             @Valid @RequestBody UserDataChangeRequest userDataChangeRequest) {
@@ -33,6 +37,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}/del")
+    @Operation(summary = "Удаление пользователя")
     public ResponseEntity<SimpleResponseBody> deleteUser(
             @Positive(message = "ID пользователя должнен быть положительным") @PathVariable("id") Long id) {
         userService.deleteUser(id);

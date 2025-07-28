@@ -18,16 +18,16 @@ import java.util.Base64;
 @Component
 public class CardNumberCryptoUtil {
 
-    private final String ALGORITHM = "AES";
-    private final String TRANSFORMATION = "AES";
+    @Value("${crypto.algorithm}")
+    private String ALGORITHM;
 
-    @Value("${encrypt-key}")
+    @Value("${crypto.encrypt-key}")
     private String SECRET_KEY;
 
     public String encrypt(String data) {
         try {
             SecretKeySpec keySpec = new SecretKeySpec(SECRET_KEY.getBytes(), ALGORITHM);
-            Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
             cipher.init(Cipher.ENCRYPT_MODE, keySpec);
             byte[] encrypted = cipher.doFinal(data.getBytes());
             return Base64.getEncoder().encodeToString(encrypted);
@@ -40,7 +40,7 @@ public class CardNumberCryptoUtil {
     public String decrypt(String encryptedData) {
         try {
             SecretKeySpec keySpec = new SecretKeySpec(SECRET_KEY.getBytes(), ALGORITHM);
-            Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
             cipher.init(Cipher.DECRYPT_MODE, keySpec);
             byte[] decrypted = cipher.doFinal(Base64.getDecoder().decode(encryptedData));
             return new String(decrypted);

@@ -6,6 +6,8 @@ import com.example.bankcards.dto.card.CardUserDto;
 import com.example.bankcards.security.CustomUserDetails;
 import com.example.bankcards.service.BlockingRequestService;
 import com.example.bankcards.service.PersonalCardService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -26,12 +28,15 @@ import java.util.List;
 @RequestMapping("/card/my")
 @RequiredArgsConstructor
 @Validated
+@Tag(name = "PersonalCardController", description =
+        "Контроллер для управления персональными картами каждым пользователем")
 public class PersonalCardController {
 
     private final PersonalCardService personalCardService;
     private final BlockingRequestService blockingRequestService;
 
     @GetMapping
+    @Operation(summary = "Получение всех карт текущего пользователя с возможностью постраничной выдачи")
     public List<CardUserDto> getAllPersonalCards(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestParam(value = "fullNumber", required = false) Boolean fullNumber,
@@ -43,6 +48,7 @@ public class PersonalCardController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Получение карты пользователя по ID")
     public ResponseEntity<CardUserDto> getPersonalCardById(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestParam(value = "fullNumber", required = false) Boolean fullNumber,
@@ -52,6 +58,7 @@ public class PersonalCardController {
     }
 
     @GetMapping("/balance")
+    @Operation(summary = "Получение суммарного баланса всех активированных карт пользователя")
     public ResponseEntity<BalanceResponseDto> getPersonalCardsTotalBalance(
             @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         BigDecimal totalBalance = personalCardService.getPersonalCardsTotalBalance(customUserDetails.getUserId());
@@ -59,6 +66,7 @@ public class PersonalCardController {
     }
 
     @GetMapping("/{id}/balance")
+    @Operation(summary = "Получение баланса карты пользователя по ID")
     public ResponseEntity<BalanceResponseDto> getPersonalCardBalance(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @Positive(message = "ID карты должен быть положительным") @PathVariable("id") Long id) {
@@ -67,6 +75,7 @@ public class PersonalCardController {
     }
 
     @PostMapping("/{id}/block")
+    @Operation(summary = "Создание запроса на блокировку карты с переданным ID")
     public ResponseEntity<SimpleResponseBody> createCardBlockingRequest(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @Positive(message = "ID карты должен быть положительным") @PathVariable("id") Long id) {

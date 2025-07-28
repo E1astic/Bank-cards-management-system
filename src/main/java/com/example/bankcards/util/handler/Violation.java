@@ -1,4 +1,4 @@
-package com.example.bankcards.util.validator;
+package com.example.bankcards.util.handler;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
