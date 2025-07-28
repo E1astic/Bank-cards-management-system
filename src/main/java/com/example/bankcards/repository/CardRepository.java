@@ -33,7 +33,7 @@ public interface CardRepository extends JpaRepository<Card, Long> {
 
     @Modifying
     @Query(value = "UPDATE Cards SET owner_id = NULL WHERE id IN :cardIds", nativeQuery = true)
-    int clearOwnerByCardIdIn(@Param("cardIds") List<Long> cardIds);
+    void clearOwnerByCardIdIn(@Param("cardIds") List<Long> cardIds);
 
     @Modifying
     @Query(value = "DELETE FROM cards WHERE id = :id", nativeQuery = true)

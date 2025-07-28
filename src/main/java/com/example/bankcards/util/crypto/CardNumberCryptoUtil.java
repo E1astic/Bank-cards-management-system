@@ -54,7 +54,7 @@ public class CardNumberCryptoUtil {
         final int digitsNumber = 16;
         final int spacesNumber = 3;
         final int numberLength = digitsNumber + spacesNumber;
-        if (cardNumber == null || cardNumber.length() != numberLength) {
+        if (cardNumber == null || !cardNumber.matches("\\d{4} \\d{4} \\d{4} \\d{4}")) {
             throw new IncorrectCardNumberException();
         }
         String lastFour = cardNumber.substring(numberLength - 4);

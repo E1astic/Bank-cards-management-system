@@ -5,7 +5,7 @@ import com.example.bankcards.dto.card.BalanceResponseDto;
 import com.example.bankcards.dto.card.CardUserDto;
 import com.example.bankcards.security.CustomUserDetails;
 import com.example.bankcards.service.BlockingRequestService;
-import com.example.bankcards.service.CardService;
+import com.example.bankcards.service.PersonalCardService;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ import java.util.List;
 @Validated
 public class PersonalCardController {
 
-    private final CardService cardService;
+    private final PersonalCardService personalCardService;
     private final BlockingRequestService blockingRequestService;
 
     @GetMapping
@@ -39,7 +39,7 @@ public class PersonalCardController {
             @RequestParam(value = "size", defaultValue = "10") Integer size,
             @Min(value = 0, message = "Номер страницы не может быть отрицательным")
             @RequestParam(value = "page", defaultValue = "0") Integer page) {
-        return cardService.getAllUserCards(customUserDetails.getUserId(), fullNumber, size, page);
+        return personalCardService.getAllUserCards(customUserDetails.getUserId(), fullNumber, size, page);
     }
 
     @GetMapping("/{id}")
@@ -47,14 +47,14 @@ public class PersonalCardController {
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestParam(value = "fullNumber", required = false) Boolean fullNumber,
             @Positive(message = "ID карты должен быть положительным") @PathVariable("id") Long id) {
-        CardUserDto cardUserDto = cardService.getUserCardById(id, customUserDetails.getUserId(), fullNumber);
+        CardUserDto cardUserDto = personalCardService.getUserCardById(id, customUserDetails.getUserId(), fullNumber);
         return ResponseEntity.ok(cardUserDto);
     }
 
     @GetMapping("/balance")
     public ResponseEntity<BalanceResponseDto> getPersonalCardsTotalBalance(
             @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        BigDecimal totalBalance = cardService.getPersonalCardsTotalBalance(customUserDetails.getUserId());
+        BigDecimal totalBalance = personalCardService.getPersonalCardsTotalBalance(customUserDetails.getUserId());
         return ResponseEntity.ok(new BalanceResponseDto(totalBalance));
     }
 
@@ -62,7 +62,7 @@ public class PersonalCardController {
     public ResponseEntity<BalanceResponseDto> getPersonalCardBalance(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @Positive(message = "ID карты должен быть положительным") @PathVariable("id") Long id) {
-        BigDecimal cardBalance = cardService.getPersonalCardBalance(id, customUserDetails.getUserId());
+        BigDecimal cardBalance = personalCardService.getPersonalCardBalance(id, customUserDetails.getUserId());
         return ResponseEntity.ok(new BalanceResponseDto(cardBalance));
     }
 

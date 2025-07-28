@@ -6,13 +6,12 @@ import com.example.bankcards.dto.card.CardRegisterRequest;
 import com.example.bankcards.dto.card.CardRegisterResponse;
 import com.example.bankcards.dto.SimpleResponseBody;
 import com.example.bankcards.service.BlockingRequestService;
-import com.example.bankcards.service.CardService;
+import com.example.bankcards.service.CardAdminService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,9 +31,9 @@ import java.util.List;
 @RequestMapping("/card")
 @RequiredArgsConstructor
 @Validated
-public class CardController {
+public class CardAdminController {
 
-    private final CardService cardService;
+    private final CardAdminService cardAdminService;
     private final BlockingRequestService blockingRequestService;
 
     @GetMapping("/all")
@@ -44,21 +43,21 @@ public class CardController {
             @RequestParam(value = "size", defaultValue = "10") Integer size,
             @Min(value = 0, message = "Номер страницы не может быть отрицательным")
             @RequestParam(value = "page", defaultValue = "0") Integer page) {
-        return cardService.getAllCards(fullNumber, size, page);
+        return cardAdminService.getAllCards(fullNumber, size, page);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CardAdminDto> getCardById(
             @Positive(message = "ID карты должен быть положительным") @PathVariable("id") Long id,
             @RequestParam(value = "fullNumber", required = false) Boolean fullNumber) {
-        CardAdminDto card = cardService.getCardById(id, fullNumber);
+        CardAdminDto card = cardAdminService.getCardById(id, fullNumber);
         return ResponseEntity.ok(card);
     }
 
     @PostMapping("/register")
     public ResponseEntity<CardRegisterResponse> registerCard(
             @Valid @RequestBody CardRegisterRequest cardRegisterRequest) {
-        long cardId = cardService.registerCard(cardRegisterRequest);
+        long cardId = cardAdminService.registerCard(cardRegisterRequest);
         return ResponseEntity.ok(new CardRegisterResponse(cardId));
     }
 
@@ -66,13 +65,13 @@ public class CardController {
     public ResponseEntity<SimpleResponseBody> updateCardStatus(
             @Positive(message = "ID карты должен быть положительным") @PathVariable("id") Long id,
             @PathVariable("status") String status) {
-        cardService.changeCardStatus(id, status);
+        cardAdminService.changeCardStatus(id, status);
         return ResponseEntity.ok(new SimpleResponseBody("Статус карты был успешен изменен"));
     }
 
     @PatchMapping("/expired/today/check")
     public ResponseEntity<SimpleResponseBody> checkTodayExpiredCard() {
-        int expiredCards = cardService.updateExpiredCards(LocalDate.now());
+        int expiredCards = cardAdminService.updateExpiredCards(LocalDate.now());
         return ResponseEntity.ok(new SimpleResponseBody(String.format(
                 "У %d карт сегодня истекает срок. Их статус был успешен изменен", expiredCards)));
     }
@@ -81,7 +80,7 @@ public class CardController {
     public ResponseEntity<SimpleResponseBody> checkExpiredCard(
             @PastOrPresent(message = "Дата должна быть прошедшей или текущей")
             @PathVariable("expirationDate") LocalDate expirationDate) {
-        int expiredCards = cardService.updateExpiredCards(expirationDate);
+        int expiredCards = cardAdminService.updateExpiredCards(expirationDate);
         return ResponseEntity.ok(new SimpleResponseBody(String.format(
                 "У %d карт %s истекает срок. Их статус был успешен изменен", expiredCards, expirationDate)));
     }
@@ -89,7 +88,7 @@ public class CardController {
     @DeleteMapping("/{id}/del")
     public ResponseEntity<SimpleResponseBody> deleteCardById(
             @Positive(message = "ID карты должен быть положительным") @PathVariable long id) {
-        cardService.deleteCardById(id);
+        cardAdminService.deleteCardById(id);
         return ResponseEntity.ok(new SimpleResponseBody("Карта была успешно удалена"));
     }
 

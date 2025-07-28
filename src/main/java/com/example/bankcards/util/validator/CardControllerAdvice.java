@@ -14,8 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import java.time.format.DateTimeParseException;
 
 @RestControllerAdvice
 public class CardControllerAdvice {
@@ -29,12 +29,6 @@ public class CardControllerAdvice {
     public ResponseEntity<SimpleResponseBody> handleException(IncorrectCardStatusException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new SimpleResponseBody("Некорректный статус карты"));
-    }
-
-    @ExceptionHandler(DateTimeParseException.class)
-    public ResponseEntity<SimpleResponseBody> handleException(DateTimeParseException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                new SimpleResponseBody("Некорректный формат даты"));
     }
 
     @ExceptionHandler(BlockedCardException.class)
@@ -61,16 +55,22 @@ public class CardControllerAdvice {
                 new SimpleResponseBody("На карте недостаточно средств для списания"));
     }
 
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<SimpleResponseBody> handleException(MethodArgumentTypeMismatchException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new SimpleResponseBody("Некорректный параметр запроса: " + e.getParameter().getParameterName()));
+    }
+
     @ExceptionHandler(EncryptionException.class)
     public ResponseEntity<SimpleResponseBody> handleException(EncryptionException e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                new SimpleResponseBody(e.getMessage()));
+                new SimpleResponseBody("Ошибка шифрования"));
     }
 
     @ExceptionHandler(DecryptionException.class)
     public ResponseEntity<SimpleResponseBody> handleException(DecryptionException e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                new SimpleResponseBody(e.getMessage()));
+                new SimpleResponseBody("Ошибка дешифрования"));
     }
 
     @ExceptionHandler(IncorrectCardNumberException.class)

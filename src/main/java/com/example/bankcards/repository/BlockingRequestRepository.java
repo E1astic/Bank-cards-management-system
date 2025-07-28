@@ -20,5 +20,5 @@ public interface BlockingRequestRepository extends JpaRepository<CardBlockingReq
 
     @Modifying
     @Query(value = "UPDATE blocking_requests SET card_id = NULL WHERE card_id = :id", nativeQuery = true)
-    int clearCardsByCardId(@Param("id") Long id);
+    void clearCardsByCardId(@Param("id") Long id);
 }

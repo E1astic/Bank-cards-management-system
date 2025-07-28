@@ -3,9 +3,11 @@ package com.example.bankcards.dto.user;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class UserDataChangeRequest {
 
     @NotBlank(message = "Пароль не должен быть пустым")
