@@ -18,12 +18,6 @@ spring:
   liquibase:
     change-log: db/changelog/changelog-master.yaml
 
-springdoc:
-  api-docs:
-    enabled: true
-  swagger-ui:
-    enabled: true
-
 jwt:
   secret: c1107dMqjNQ0qcB0MA2qXerxoPfSaRaBwn5awSXdiIXD51kvOQVdxB1UO6if2SWGm9e4bubObaChqqr91Bw9XMsKKnFDkKZoWTqplTK1GuzwMGK8TZdeLw9kxUFuYs6ObqbhtrmLTo2CgrJkuSUPFhlMWqtfvmrrHLTCgIcoQEUM8395c6DS1xKIsFNYWiLzsmcYIt7abPupnMVjah6Mc6aXt1mtw64wp3JZpciRmEyD9ZvJcdrcUYBrEV1vRbPn
   lifetime: 10m
